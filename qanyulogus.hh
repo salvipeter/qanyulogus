@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 19:19:31 (salvi)>
+// Time-stamp: <2008.03.17., 22:29:55 (salvi)>
 
 #ifndef QANYULOGUS_HH
 #define QANYULOGUS_HH

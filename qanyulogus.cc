@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 21:43:39 (salvi)>
+// Time-stamp: <2008.03.17., 22:29:51 (salvi)>
 
 #include <QComboBox>
 #include <QFile>
@@ -32,6 +32,8 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   table->setModel(tableProxy);
   table->setEditTriggers(QAbstractItemView::DoubleClicked);
   table->setSelectionMode(QAbstractItemView::SingleSelection);
+  table->setSelectionBehavior(QAbstractItemView::SelectRows);
+  table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
   searchProxy = new HungarianSortFilterProxyModel;
   searchProxy->setSourceModel(model);
@@ -46,6 +48,7 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   search->setEditTriggers(QAbstractItemView::NoEditTriggers);
   search->setSelectionMode(QAbstractItemView::SingleSelection);
   search->setSelectionBehavior(QAbstractItemView::SelectRows);
+  search->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
   searchLabel = new QLabel(tr("Keresés:"));
   searchEdit = new QLineEdit;
@@ -174,6 +177,7 @@ void QAnyulogus::newPressed()
   for(int i = 0; i < model->columnCount(); ++i)
     model->setItem(j, i, new QStandardItem(""));
   table->scrollTo(tableProxy->mapFromSource(model->item(j)->index()));
+  table->selectRow(tableProxy->mapFromSource(model->item(j)->index()).row());
   table->edit(tableProxy->mapFromSource(model->item(j)->index()));
 }
 
