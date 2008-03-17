@@ -6,6 +6,6 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += qanyulogus.hh
-SOURCES += main.cc qanyulogus.cc
+HEADERS += main-window.hh qanyulogus.hh
+SOURCES += main.cc main-window.cc qanyulogus.cc
 RESOURCES = qanyulogus.qrc

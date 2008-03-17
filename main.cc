@@ -1,11 +1,11 @@
 #include <QtGui>
 
-#include "qanyulogus.hh"
+#include "main-window.hh"
 
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  QAnyulogus window;
+  MainWindow window;
   window.show();
   return app.exec();
 }
