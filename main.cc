@@ -1,3 +1,7 @@
+// QAnyulogus, by Peter Salvi (2008)
+//
+// Time-stamp: <2008.03.17., 13:46:40 (salvi)>
+
 #include <iostream>
 
 #include <QtGui>

@@ -1,4 +1,8 @@
 # -*- mode: makefile -*-
+#
+# QAnyulogus, by Peter Salvi (2008)
+#
+# Time-stamp: <2008.03.17., 13:47:18 (salvi)>
 
 TEMPLATE = app
 TARGET = 

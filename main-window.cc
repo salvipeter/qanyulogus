@@ -1,3 +1,7 @@
+// QAnyulogus, by Peter Salvi (2008)
+//
+// Time-stamp: <2008.03.17., 17:54:59 (salvi)>
+
 #include <QAction>
 #include <QCloseEvent>
 #include <QFileDialog>
@@ -14,37 +18,41 @@ MainWindow::MainWindow(QString filename = "") :
   setTitle();
 
   // Initial size
-  resize(640, 480);
+  resize(800, 600);
 
   // Actions
   openAction = new QAction(QIcon(":/images/fileopen.png"), tr("Megnyitás"), this);
   openAction->setShortcut(tr("Ctrl+O"));
-  openAction->setStatusTip(tr("Megnyit egy QAnyulógus fájlt."));
+  openAction->setStatusTip(tr("Megnyit egy QAnyulógus fájlt. (C-o)"));
   connect(openAction, SIGNAL(triggered()), this, SLOT(openPressed()));
 
   saveAction = new QAction(QIcon(":/images/filesave.png"), tr("Mentés"), this);
   saveAction->setShortcut(tr("Ctrl+S"));
-  saveAction->setStatusTip(tr("Elmenti a QAnyulógus fájlt."));
+  saveAction->setStatusTip(tr("Elmenti a QAnyulógus fájlt. (C-s)"));
+  saveAction->setEnabled(false);
   connect(saveAction, SIGNAL(triggered()), this, SLOT(savePressed()));
 
   newAction = new QAction(QIcon(":/images/linenew.png"), tr("Új sor"), this);
   newAction->setShortcut(tr("Ctrl+N"));
-  newAction->setStatusTip(tr("Új bejegyzést nyit a katalógusban."));
+  newAction->setStatusTip(tr("Új bejegyzést nyit a katalógusban. (C-n)"));
+  newAction->setEnabled(false);
   connect(newAction, SIGNAL(triggered()), this, SLOT(newPressed()));
 
   deleteAction = new QAction(QIcon(":/images/linedelete.png"), tr("Sor törlése"), this);
   deleteAction->setShortcut(tr("Ctrl+D"));
-  deleteAction->setStatusTip(tr("Kitöröl egy bejegyzést a katalógusból."));
+  deleteAction->setStatusTip(tr("Kitöröl egy bejegyzést a katalógusból. (C-d)"));
+  deleteAction->setEnabled(false);
   connect(deleteAction, SIGNAL(triggered()), this, SLOT(deletePressed()));
 
   printAction = new QAction(QIcon(":/images/fileprint.png"), tr("Nyomtatás"), this);
   printAction->setShortcut(tr("Ctrl+P"));
-  printAction->setStatusTip(tr("Kinyomtatja a katalógust."));
+  printAction->setStatusTip(tr("Kinyomtatja a katalógust. (C-p)"));
+  printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), this, SLOT(printPressed()));
 
   helpAction = new QAction(QIcon(":/images/help.png"), tr("Segítség"), this);
   helpAction->setShortcut(tr("Ctrl+H"));
-  helpAction->setStatusTip(tr("Használati utasítás és egyéb információk."));
+  helpAction->setStatusTip(tr("Használati utasítás és egyéb információk. (C-h)"));
   connect(helpAction, SIGNAL(triggered()), this, SLOT(helpPressed()));
 
   // Toolbar
@@ -56,7 +64,7 @@ MainWindow::MainWindow(QString filename = "") :
   toolbar->addAction(printAction);
   toolbar->addAction(helpAction);
 
-  anyulogus = new QAnyulogus;
+  anyulogus = new QAnyulogus(this);
   setCentralWidget(anyulogus);
 
   // Status bar
@@ -64,6 +72,15 @@ MainWindow::MainWindow(QString filename = "") :
 
   if(filename != "")
     openFile(filename);
+}
+
+void MainWindow::changeMade()
+{
+  if(saved) {
+    saved = false;
+    setTitle();
+    saveAction->setEnabled(true);
+  }
 }
 
 void MainWindow::openPressed()
@@ -75,15 +92,23 @@ void MainWindow::openPressed()
     openFile(filename);
 }
 
-void MainWindow::savePressed()
+bool MainWindow::savePressed()
 {
   if(saved)
-    return;
+    return true;
 
-  // TODO
+  if(!anyulogus->saveFile(file_name)) {
+    QMessageBox::critical(this, "Mentés sikertelen",
+			  "A(z) \"" + file_name +
+			  "\" fájlt nem tudtam elmenteni.");
+    return false;
+  }
 
   saved = true;
   setTitle();
+  saveAction->setEnabled(false);
+
+  return true;
 }
 
 void MainWindow::newPressed()
@@ -115,7 +140,18 @@ void MainWindow::openFile(QString filename)
   if(!maybeSave())
     return;
 
-  // TODO
+  if(!anyulogus->openFile(filename)) {
+    QMessageBox::critical(this, "A fájl nem nyitható",
+			  "A fájl \"" + filename + "\" nem nyitható meg,\n"
+			  "vagy a fájlban nem minden bejegyzés hossza azonos.");
+    return;
+  }
+
+  if(file_name == "") {
+    newAction->setEnabled(true);
+    deleteAction->setEnabled(true);
+    printAction->setEnabled(true);
+  }
 
   file_name = filename;
   saved = true;
@@ -132,7 +168,7 @@ bool MainWindow::maybeSave()
 				 QMessageBox::Cancel, QMessageBox::Save);
   switch(ret) {
   case QMessageBox::Cancel: return false;
-  case QMessageBox::Save: savePressed();
+  case QMessageBox::Save: if(!savePressed()) return false;
   default: return true;
   }
 }

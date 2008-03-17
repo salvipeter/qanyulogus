@@ -1,3 +1,7 @@
+// QAnyulogus, by Peter Salvi (2008)
+//
+// Time-stamp: <2008.03.17., 17:57:46 (salvi)>
+
 #ifndef MAIN_WINDOW_HH
 #define MAIN_WINDOW_HH
 
@@ -16,8 +20,9 @@ public:
   MainWindow(QString filename);
 
 public slots:
+  void changeMade();
   void openPressed();
-  void savePressed();
+  bool savePressed();
   void newPressed();
   void deletePressed();
   void printPressed() const;
