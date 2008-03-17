@@ -1,12 +1,13 @@
 #include <QAction>
 #include <QCloseEvent>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QToolBar>
 
 #include "main-window.hh"
 
-MainWindow::MainWindow() :
+MainWindow::MainWindow(QString filename = "") :
   file_name(""), saved(true)
 {
   // Title
@@ -60,10 +61,18 @@ MainWindow::MainWindow() :
 
   // Status bar
   setStatusBar(new QStatusBar);
+
+  if(filename != "")
+    openFile(filename);
 }
 
 void MainWindow::openPressed()
 {
+  QString filename =
+    QFileDialog::getOpenFileName(this, tr("Megnyitás"), ".",
+				 tr("QAnyulógus fájlok (*.anyu)"));
+  if(filename != "")
+    openFile(filename);
 }
 
 void MainWindow::savePressed()
@@ -74,6 +83,7 @@ void MainWindow::savePressed()
   // TODO
 
   saved = true;
+  setTitle();
 }
 
 void MainWindow::newPressed()
@@ -94,24 +104,43 @@ void MainWindow::helpPressed() const
 
 void MainWindow::setTitle()
 {
-  QString new_title = QString("QAnyulógus") + (file_name != "" ? " - " : "")
-    + file_name + (!saved ? "*" : "");
+  QString new_title = QString("QAnyulógus");
+  if(file_name != "")
+    new_title += " - " + file_name.section('/', -1) + (!saved ? "*" : "");
   setWindowTitle(new_title);
+}
+
+void MainWindow::openFile(QString filename)
+{
+  if(!maybeSave())
+    return;
+
+  // TODO
+
+  file_name = filename;
+  saved = true;
+  setTitle();
+}
+
+bool MainWindow::maybeSave()
+{
+  if(saved)
+    return true;
+  int ret = QMessageBox::warning(this, tr("Kilépés"),
+				 tr("Nem mentetted el a katalógust."),
+				 QMessageBox::Save | QMessageBox::Discard |
+				 QMessageBox::Cancel, QMessageBox::Save);
+  switch(ret) {
+  case QMessageBox::Cancel: return false;
+  case QMessageBox::Save: savePressed();
+  default: return true;
+  }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  if(saved)
+  if(maybeSave())
     event->accept();
-  else {
-    int ret = QMessageBox::warning(this, tr("Kilépés"),
-				   tr("Nem mentetted el a katalógust."),
-				   QMessageBox::Save | QMessageBox::Discard |
-				   QMessageBox::Cancel, QMessageBox::Save);
-    switch(ret) {
-    case QMessageBox::Cancel: event->ignore(); break;
-    case QMessageBox::Save: savePressed();
-    default: event->accept();
-    }
-  }
+  else
+    event->ignore();
 }

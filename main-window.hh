@@ -13,7 +13,7 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  MainWindow();
+  MainWindow(QString filename);
 
 public slots:
   void openPressed();
@@ -25,6 +25,8 @@ public slots:
 
 private:
   void setTitle();
+  void openFile(QString filename);
+  bool maybeSave();
   void closeEvent(QCloseEvent *event);
 
   // GUI variables
