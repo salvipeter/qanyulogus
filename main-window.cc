@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 17:54:59 (salvi)>
+// Time-stamp: <2008.03.17., 18:14:17 (salvi)>
 
 #include <QAction>
 #include <QCloseEvent>
@@ -14,11 +14,12 @@
 MainWindow::MainWindow(QString filename = "") :
   file_name(""), saved(true)
 {
-  // Title
-  setTitle();
-
   // Initial size
   resize(800, 600);
+
+  // Central widget
+  anyulogus = new QAnyulogus(this);
+  setCentralWidget(anyulogus);
 
   // Actions
   openAction = new QAction(QIcon(":/images/fileopen.png"), tr("Megnyitás"), this);
@@ -36,19 +37,19 @@ MainWindow::MainWindow(QString filename = "") :
   newAction->setShortcut(tr("Ctrl+N"));
   newAction->setStatusTip(tr("Új bejegyzést nyit a katalógusban. (C-n)"));
   newAction->setEnabled(false);
-  connect(newAction, SIGNAL(triggered()), this, SLOT(newPressed()));
+  connect(newAction, SIGNAL(triggered()), anyulogus, SLOT(newPressed()));
 
   deleteAction = new QAction(QIcon(":/images/linedelete.png"), tr("Sor törlése"), this);
   deleteAction->setShortcut(tr("Ctrl+D"));
   deleteAction->setStatusTip(tr("Kitöröl egy bejegyzést a katalógusból. (C-d)"));
   deleteAction->setEnabled(false);
-  connect(deleteAction, SIGNAL(triggered()), this, SLOT(deletePressed()));
+  connect(deleteAction, SIGNAL(triggered()), anyulogus, SLOT(deletePressed()));
 
   printAction = new QAction(QIcon(":/images/fileprint.png"), tr("Nyomtatás"), this);
   printAction->setShortcut(tr("Ctrl+P"));
   printAction->setStatusTip(tr("Kinyomtatja a katalógust. (C-p)"));
   printAction->setEnabled(false);
-  connect(printAction, SIGNAL(triggered()), this, SLOT(printPressed()));
+  connect(printAction, SIGNAL(triggered()), anyulogus, SLOT(printPressed()));
 
   helpAction = new QAction(QIcon(":/images/help.png"), tr("Segítség"), this);
   helpAction->setShortcut(tr("Ctrl+H"));
@@ -64,8 +65,8 @@ MainWindow::MainWindow(QString filename = "") :
   toolbar->addAction(printAction);
   toolbar->addAction(helpAction);
 
-  anyulogus = new QAnyulogus(this);
-  setCentralWidget(anyulogus);
+  // Title
+  setTitle();
 
   // Status bar
   setStatusBar(new QStatusBar);
@@ -79,7 +80,6 @@ void MainWindow::changeMade()
   if(saved) {
     saved = false;
     setTitle();
-    saveAction->setEnabled(true);
   }
 }
 
@@ -106,21 +106,8 @@ bool MainWindow::savePressed()
 
   saved = true;
   setTitle();
-  saveAction->setEnabled(false);
 
   return true;
-}
-
-void MainWindow::newPressed()
-{
-}
-
-void MainWindow::deletePressed()
-{
-}
-
-void MainWindow::printPressed() const
-{
 }
 
 void MainWindow::helpPressed() const
@@ -133,6 +120,7 @@ void MainWindow::setTitle()
   if(file_name != "")
     new_title += " - " + file_name.section('/', -1) + (!saved ? "*" : "");
   setWindowTitle(new_title);
+  saveAction->setEnabled(!saved);
 }
 
 void MainWindow::openFile(QString filename)

@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 17:59:09 (salvi)>
+// Time-stamp: <2008.03.17., 19:18:18 (salvi)>
 
 #include <QComboBox>
 #include <QFile>
@@ -13,23 +13,35 @@
 #include <QTableView>
 #include <QTextStream>
 
+#include "hungarian-sort-filter-proxy-model.hh"
 #include "qanyulogus.hh"
 
 QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
 {
   model = new QStandardItemModel;
 
+  tableProxy = new HungarianSortFilterProxyModel;
+  tableProxy->setSourceModel(model);
+  tableProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+  tableProxy->setDynamicSortFilter(true);
+
   table = new QTableView;
   table->setAlternatingRowColors(true);
   table->setSortingEnabled(true);
-  table->setModel(model);
+  table->setModel(tableProxy);
   table->setEditTriggers(QAbstractItemView::DoubleClicked);
   table->setSelectionMode(QAbstractItemView::SingleSelection);
+
+  searchProxy = new HungarianSortFilterProxyModel;
+  searchProxy->setSourceModel(model);
+  searchProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  searchProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+  searchProxy->setDynamicSortFilter(true);
 
   search = new QTableView;
   search->setAlternatingRowColors(true);
   search->setSortingEnabled(true);
-  search->setModel(model);
+  search->setModel(searchProxy);
   search->setEditTriggers(QAbstractItemView::NoEditTriggers);
   search->setSelectionMode(QAbstractItemView::SingleSelection);
   search->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -51,7 +63,13 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   addWidget(box);
   addWidget(search);
 
-  connect(model, SIGNAL(itemChanged(QStandardItem *)), this->parent(), SLOT(changeMade()));
+  // Connections
+  connect(model, SIGNAL(itemChanged(QStandardItem *)), this->parent(),
+	  SLOT(changeMade()));
+  connect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
+	  SLOT(setFilterFixedString(const QString &)));
+  connect(searchCombo, SIGNAL(activated(int)), this,
+	  SLOT(setFilterColumn(int)));
 }
 
 bool QAnyulogus::openFile(QString filename)
@@ -140,4 +158,21 @@ bool QAnyulogus::saveFile(QString filename)
 
   file.close();
   return true;
+}
+
+void QAnyulogus::newPressed()
+{
+}
+
+void QAnyulogus::deletePressed()
+{
+}
+
+void QAnyulogus::printPressed() const
+{
+}
+
+void QAnyulogus::setFilterColumn(int column)
+{
+  searchProxy->setFilterKeyColumn(column);
 }

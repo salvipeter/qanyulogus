@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 17:57:46 (salvi)>
+// Time-stamp: <2008.03.17., 18:12:15 (salvi)>
 
 #ifndef MAIN_WINDOW_HH
 #define MAIN_WINDOW_HH
@@ -23,9 +23,6 @@ public slots:
   void changeMade();
   void openPressed();
   bool savePressed();
-  void newPressed();
-  void deletePressed();
-  void printPressed() const;
   void helpPressed() const;
 
 private:
