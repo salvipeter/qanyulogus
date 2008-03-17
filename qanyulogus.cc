@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 19:18:18 (salvi)>
+// Time-stamp: <2008.03.17., 21:43:39 (salvi)>
 
 #include <QComboBox>
 #include <QFile>
@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
+#include <QMessageBox>
 #include <QStandardItemModel>
 #include <QStringList>
 #include <QTableView>
@@ -66,6 +67,10 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   // Connections
   connect(model, SIGNAL(itemChanged(QStandardItem *)), this->parent(),
 	  SLOT(changeMade()));
+  connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+	  this->parent(), SLOT(changeMade()));
+  connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+	  this->parent(), SLOT(changeMade()));
   connect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
 	  SLOT(setFilterFixedString(const QString &)));
   connect(searchCombo, SIGNAL(activated(int)), this,
@@ -109,6 +114,8 @@ bool QAnyulogus::openFile(QString filename)
     for(int i = 0; i < n; ++i)
       model->setItem(j, i, new QStandardItem(row[i]));
   }
+  table->sortByColumn(0, Qt::AscendingOrder);
+  search->sortByColumn(0, Qt::AscendingOrder);
   
   searchCombo->clear();
   searchCombo->addItems(headings);
@@ -162,10 +169,24 @@ bool QAnyulogus::saveFile(QString filename)
 
 void QAnyulogus::newPressed()
 {
+  int j = model->rowCount();
+  model->insertRow(j);
+  for(int i = 0; i < model->columnCount(); ++i)
+    model->setItem(j, i, new QStandardItem(""));
+  table->scrollTo(tableProxy->mapFromSource(model->item(j)->index()));
+  table->edit(tableProxy->mapFromSource(model->item(j)->index()));
 }
 
 void QAnyulogus::deletePressed()
 {
+  int row = model->itemFromIndex(tableProxy->mapToSource(table->currentIndex()))->row();
+  QString message = QString("Tényleg ki akarod törölni a(z) %1. sort?").
+    arg(row + 1);
+  int ret = QMessageBox::question(dynamic_cast<QWidget *>(parent()),
+				  "Törlés", message,
+				  QMessageBox::Yes, QMessageBox::No);
+  if(ret == QMessageBox::Yes)
+    model->removeRow(row);
 }
 
 void QAnyulogus::printPressed() const

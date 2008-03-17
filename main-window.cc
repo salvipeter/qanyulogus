@@ -1,6 +1,6 @@
 // QAnyulogus, by Peter Salvi (2008)
 //
-// Time-stamp: <2008.03.17., 18:14:17 (salvi)>
+// Time-stamp: <2008.03.17., 21:46:39 (salvi)>
 
 #include <QAction>
 #include <QCloseEvent>
@@ -85,6 +85,9 @@ void MainWindow::changeMade()
 
 void MainWindow::openPressed()
 {
+  if(!maybeSave())
+    return;
+
   QString filename =
     QFileDialog::getOpenFileName(this, tr("Megnyitás"), ".",
 				 tr("QAnyulógus fájlok (*.anyu)"));
@@ -125,9 +128,6 @@ void MainWindow::setTitle()
 
 void MainWindow::openFile(QString filename)
 {
-  if(!maybeSave())
-    return;
-
   if(!anyulogus->openFile(filename)) {
     QMessageBox::critical(this, "A fájl nem nyitható",
 			  "A fájl \"" + filename + "\" nem nyitható meg,\n"
@@ -150,7 +150,7 @@ bool MainWindow::maybeSave()
 {
   if(saved)
     return true;
-  int ret = QMessageBox::warning(this, tr("Kilépés"),
+  int ret = QMessageBox::warning(this, tr("A katalógus megváltozott."),
 				 tr("Nem mentetted el a katalógust."),
 				 QMessageBox::Save | QMessageBox::Discard |
 				 QMessageBox::Cancel, QMessageBox::Save);
