@@ -10,7 +10,7 @@
 
 #include "main-window.hh"
 
-MainWindow::MainWindow(QString filename = "") :
+MainWindow::MainWindow() :
   file_name(""), saved(true)
 {
   // Initial size
@@ -69,9 +69,6 @@ MainWindow::MainWindow(QString filename = "") :
 
   // Status bar
   setStatusBar(new QStatusBar);
-
-  if(filename != "")
-    openFile(filename);
 }
 
 void MainWindow::changeMade()

@@ -15,7 +15,8 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  MainWindow(QString filename);
+  MainWindow();
+  void openFile(QString filename);
 
 public slots:
   void changeMade();
@@ -25,7 +26,6 @@ public slots:
 
 private:
   void setTitle();
-  void openFile(QString filename);
   bool maybeSave();
   void closeEvent(QCloseEvent *event);
 

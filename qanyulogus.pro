@@ -8,8 +8,9 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += main-window.hh qanyulogus.hh hungarian-sort-filter-proxy-model.hh
-SOURCES += main.cc main-window.cc qanyulogus.cc \
+HEADERS += opener-application.hh main-window.hh qanyulogus.hh \
+	hungarian-sort-filter-proxy-model.hh
+SOURCES += opener-application.cc main.cc main-window.cc qanyulogus.cc \
 	hungarian-sort-filter-proxy-model.cc
 RESOURCES = qanyulogus.qrc
 
