@@ -14,4 +14,4 @@ SOURCES += main.cc main-window.cc qanyulogus.cc \
 RESOURCES = qanyulogus.qrc
 
 # Type specification for Mac OS X
-# QMAKE_INFO_PLIST = Info.plist
+QMAKE_INFO_PLIST = Info.plist
