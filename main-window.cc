@@ -1,12 +1,11 @@
 // QAnyulogus, by Peter Salvi (2008)
-//
-// Time-stamp: <2008.03.17., 21:46:39 (salvi)>
 
 #include <QAction>
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QTextBrowser>
 #include <QToolBar>
 
 #include "main-window.hh"
@@ -115,6 +114,11 @@ bool MainWindow::savePressed()
 
 void MainWindow::helpPressed() const
 {
+  QTextBrowser *browser = new QTextBrowser;
+  browser->setSource(QUrl("qrc:/doc/help.html"));
+  browser->setWindowTitle(tr("Használati útmutató"));
+  browser->resize(640, 480);
+  browser->show();
 }
 
 void MainWindow::setTitle()

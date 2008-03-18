@@ -1,6 +1,4 @@
 // QAnyulogus, by Peter Salvi (2008)
-//
-// Time-stamp: <2008.03.17., 22:29:51 (salvi)>
 
 #include <QComboBox>
 #include <QFile>
@@ -107,6 +105,10 @@ bool QAnyulogus::openFile(QString filename)
 
   int const m = data.size();
 
+  // Turn off sorting while setting data
+  tableProxy->setDynamicSortFilter(false);
+  searchProxy->setDynamicSortFilter(false);
+
   // Set the tables and the combo box
   model->clear();
   model->setColumnCount(n);
@@ -117,9 +119,15 @@ bool QAnyulogus::openFile(QString filename)
     for(int i = 0; i < n; ++i)
       model->setItem(j, i, new QStandardItem(row[i]));
   }
+  tableProxy->setDynamicSortFilter(true);
+  searchProxy->setDynamicSortFilter(true);
   table->sortByColumn(0, Qt::AscendingOrder);
   search->sortByColumn(0, Qt::AscendingOrder);
-  
+
+  // Reload to reflect the changes
+  tableProxy->setSourceModel(model);
+  searchProxy->setSourceModel(model);  
+
   searchCombo->clear();
   searchCombo->addItems(headings);
 

@@ -1,0 +1,24 @@
+<key>UTExportedTypeDeclarations</key>
+<array>
+  <dict>
+    <key>UTTypeIdentifier</key>
+    <string>com.salvipeter.anyu</string>
+    <key>UTTypeReferenceURL</key>
+    <string>http://www.salvipeter.com/archive/index.html#qanyulogus</string>
+    <key>UTTypeDescription</key>
+    <string>QAnyulogus file</string>
+    <key>UTTypeIconFile</key>
+    <string>com.salvipeter.icns</string>
+    <key>UTTypeConformsTo</key>
+    <array>
+      <string>public.text</string>
+    </array>
+    <key>UTTypeTagSpecification</key>
+    <dict>
+      <key>public.filename-extension</key>
+      <array>
+        <string>anyu</string>
+      </array>
+    </dict>
+  </dict>
+</array>

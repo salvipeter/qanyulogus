@@ -1,5 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+    <file>doc/help.html</file>
+    <file>images/cake.png</file>
     <file>images/fileopen.png</file>
     <file>images/fileprint.png</file>
     <file>images/filesave.png</file>

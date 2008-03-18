@@ -1,6 +1,4 @@
 // QAnyulogus, by Peter Salvi (2008)
-//
-// Time-stamp: <2008.03.17., 22:29:55 (salvi)>
 
 #ifndef QANYULOGUS_HH
 #define QANYULOGUS_HH
@@ -34,7 +32,6 @@ public slots:
 private:
   QString createRow(QStringList list);
 
-  // GUI variables
   QStandardItemModel *model;
   HungarianSortFilterProxyModel *tableProxy;
   QTableView *table;

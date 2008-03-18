@@ -1,6 +1,4 @@
 // QAnyulogus, by Peter Salvi (2008)
-//
-// Time-stamp: <2008.03.17., 18:12:15 (salvi)>
 
 #ifndef MAIN_WINDOW_HH
 #define MAIN_WINDOW_HH
