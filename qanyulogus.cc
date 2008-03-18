@@ -7,10 +7,13 @@
 #include <QLineEdit>
 #include <QList>
 #include <QMessageBox>
+#include <QPrinter>
 #include <QStandardItemModel>
 #include <QStringList>
 #include <QTableView>
+#include <QTextDocument>
 #include <QTextStream>
+#include <QVector>
 
 #include "hungarian-sort-filter-proxy-model.hh"
 #include "qanyulogus.hh"
@@ -201,8 +204,66 @@ void QAnyulogus::deletePressed()
     model->removeRow(row);
 }
 
-void QAnyulogus::printPressed() const
+void QAnyulogus::printPressed()
 {
+  if(QMessageBox::question(this, "Nyomtatás",
+			   "Az alsó táblázat tartalmát fogom kinyomtatni.\n"
+			   "Mehet?", QMessageBox::No, QMessageBox::Yes)
+     == QMessageBox::No)
+    return;
+
+  QString str =
+    "<html>\n"
+    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+    "<head>\n"
+    "<title>CD Katalógus</title>\n"
+    "</head>\n"
+    "<body>\n"
+    "<h1>CD Katalógus</h1>\n"
+    "<table border=\"1\" align=\"center\">\n";
+
+  int const n = searchProxy->columnCount();
+  int const m = searchProxy->rowCount();
+
+  int total_width = 0;
+  QVector<int> widths(n);
+  for(int i = 0; i < n; ++i) {
+    widths[i] = search->columnWidth(i);
+    total_width += widths[i];
+  }
+
+  // Setup headings
+  str += "<tr>";
+  for(int i = 0; i < n; ++i) {
+    QString heading = searchProxy->headerData(i, Qt::Horizontal,
+					      Qt::DisplayRole).toString();
+    str += QString("<td width=\"%1%\">%2</td>").
+      arg((widths[i] * 100) / total_width).
+      arg(heading);
+  }
+  str += "</tr>\n";
+
+  // Write the data
+
+  for(int j = 0; j < m; ++j) {
+    str += "<tr>";
+    for(int i = 0; i < n; ++i)
+      str += QString("<td>%1</td>").
+	arg(searchProxy->itemData(searchProxy->index(j, i))
+	    [Qt::DisplayRole].toString());
+    str += "</tr>\n";
+  }
+
+  str +=
+    "</table>\n"
+    "</body>\n"
+    "</html>\n";
+
+  // Printing
+  QTextDocument *d = new QTextDocument;
+  QPrinter *printer = new QPrinter;
+  d->setHtml(str);
+  d->print(printer);
 }
 
 void QAnyulogus::setFilterColumn(int column)

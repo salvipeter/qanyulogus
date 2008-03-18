@@ -26,7 +26,7 @@ public:
 public slots:
   void newPressed();
   void deletePressed();
-  void printPressed() const;
+  void printPressed();
   void setFilterColumn(int column);
 
 private:
