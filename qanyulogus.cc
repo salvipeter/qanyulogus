@@ -94,13 +94,13 @@ bool QAnyulogus::openFile(QString filename)
 
   QList<QStringList> data;
 
-  QString s = in.readLine().replace("**", "*");
-  QStringList headings = s.split('*');
+  QStringList headings = in.readLine().split('*').
+    replaceInStrings("\\s", "*").replaceInStrings("\\\\", "\\");
   int const n = headings.size();
 
   while(!in.atEnd()) {
-    s = in.readLine().replace("**", "*");
-    QStringList const lst = s.split('*');
+    QStringList const lst = in.readLine().split('*').
+      replaceInStrings("\\s", "*").replaceInStrings("\\\\", "\\");
     if(lst.size() != n)
       return false;
     data.push_back(lst);
@@ -137,24 +137,6 @@ bool QAnyulogus::openFile(QString filename)
   searchCombo->addItems(headings);
 
   return true;
-}
-
-QString QAnyulogus::createRow(QStringList list)
-{
-  int const n = list.size();
-
-  if(n == 0)
-    return " ";
-
-  QString result = "";
-  for(int i = 0; i < n; ++i) {
-    QString const next = list[i].replace('*', "**");
-    result += (next == "" ? " " : next);
-    if(i != n - 1)
-      result += "*";
-  }
-
-  return result;
 }
 
 bool QAnyulogus::saveFile(QString filename)

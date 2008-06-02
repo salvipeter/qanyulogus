@@ -44,4 +44,11 @@ private:
   QTableView *search;
 };
 
+inline
+QString QAnyulogus::createRow(QStringList list)
+{
+  return list.replaceInStrings("\\", "\\\\").replaceInStrings("*", "\\s").
+    join("*");
+}
+
 #endif	// QANYULOGUS_HH
