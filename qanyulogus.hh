@@ -3,6 +3,7 @@
 #ifndef QANYULOGUS_HH
 #define QANYULOGUS_HH
 
+#include <QModelIndex>
 #include <QSplitter>
 #include <QString>
 #include <QStringList>
@@ -28,6 +29,7 @@ public slots:
   void deletePressed();
   void printPressed();
   void setFilterColumn(int column);
+  void selectTableElement(const QModelIndex &index);
 
 private:
   QString createRow(QStringList list);

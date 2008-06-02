@@ -79,6 +79,8 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
 	  SLOT(setFilterFixedString(const QString &)));
   connect(searchCombo, SIGNAL(activated(int)), this,
 	  SLOT(setFilterColumn(int)));
+  connect(search, SIGNAL(doubleClicked(const QModelIndex &)),
+	  this, SLOT(selectTableElement(const QModelIndex &)));
 }
 
 bool QAnyulogus::openFile(QString filename)
@@ -269,4 +271,14 @@ void QAnyulogus::printPressed()
 void QAnyulogus::setFilterColumn(int column)
 {
   searchProxy->setFilterKeyColumn(column);
+}
+
+void QAnyulogus::selectTableElement(const QModelIndex &index)
+{
+  // index shows a row from the searchProxy.
+  // We want to set tableProxy to the same row.
+  QModelIndex const table_index =
+    tableProxy->mapFromSource(searchProxy->mapToSource(index));
+  table->scrollTo(table_index);
+  table->selectRow(table_index.row());
 }
