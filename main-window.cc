@@ -32,6 +32,12 @@ MainWindow::MainWindow() :
   saveAction->setEnabled(false);
   connect(saveAction, SIGNAL(triggered()), this, SLOT(savePressed()));
 
+  exportAction = new QAction(QIcon(":/images/fileexport.png"), tr("Export"), this);
+  exportAction->setShortcut(tr("Ctrl+E"));
+  exportAction->setStatusTip(tr("Exportál HTML fájlba. (C-e)"));
+  exportAction->setEnabled(false);
+  connect(exportAction, SIGNAL(triggered()), this, SLOT(exportPressed()));
+
   newAction = new QAction(QIcon(":/images/linenew.png"), tr("Új sor"), this);
   newAction->setShortcut(tr("Ctrl+N"));
   newAction->setStatusTip(tr("Új bejegyzést nyit a katalógusban. (C-n)"));
@@ -59,6 +65,7 @@ MainWindow::MainWindow() :
   toolbar = addToolBar(tr("Eszköztár"));
   toolbar->addAction(openAction);
   toolbar->addAction(saveAction);
+  toolbar->addAction(exportAction);
   toolbar->addAction(newAction);
   toolbar->addAction(deleteAction);
   toolbar->addAction(printAction);
@@ -109,6 +116,22 @@ bool MainWindow::savePressed()
   return true;
 }
 
+void MainWindow::exportPressed()
+{
+  QString filename =
+    QFileDialog::getSaveFileName(this, tr("Exportálás"), ".",
+				 tr("HTML fájlok (*.html)"));
+  if(filename != "") {
+    if(!filename.endsWith("html", Qt::CaseInsensitive))
+      filename += ".html";
+    if(!anyulogus->exportFile(filename)) {
+      QMessageBox::critical(this, "Exportálás sikertelen",
+			    "A(z) \"" + file_name +
+			    "\" fájlt nem tudtam írni.");
+    }
+  }
+}
+
 void MainWindow::helpPressed() const
 {
   QTextBrowser *browser = new QTextBrowser;
@@ -137,6 +160,7 @@ void MainWindow::openFile(QString filename)
   }
 
   if(file_name == "") {
+    exportAction->setEnabled(true);
     newAction->setEnabled(true);
     deleteAction->setEnabled(true);
     printAction->setEnabled(true);

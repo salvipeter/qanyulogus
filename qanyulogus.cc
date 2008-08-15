@@ -92,6 +92,8 @@ bool QAnyulogus::openFile(QString filename)
   QTextStream in(&file);
   in.setCodec("UTF-16LE");
 
+  data_title = in.readLine();
+
   QList<QStringList> data;
 
   QStringList headings = in.readLine().split('*').
@@ -188,22 +190,16 @@ void QAnyulogus::deletePressed()
     model->removeRow(row);
 }
 
-void QAnyulogus::printPressed()
+QString QAnyulogus::generateHTML()
 {
-  if(QMessageBox::question(this, "Nyomtatás",
-			   "Az alsó táblázat tartalmát fogom kinyomtatni.\n"
-			   "Mehet?", QMessageBox::No, QMessageBox::Yes)
-     == QMessageBox::No)
-    return;
-
   QString str =
     "<html>\n"
     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
     "<head>\n"
-    "<title>CD Katalógus</title>\n"
+    "<title>" + data_title + "</title>\n"
     "</head>\n"
     "<body>\n"
-    "<h1>CD Katalógus</h1>\n"
+    "<h1>" + data_title + "</h1>\n"
     "<table border=\"1\" align=\"center\">\n";
 
   int const n = searchProxy->columnCount();
@@ -221,7 +217,7 @@ void QAnyulogus::printPressed()
   for(int i = 0; i < n; ++i) {
     QString heading = searchProxy->headerData(i, Qt::Horizontal,
 					      Qt::DisplayRole).toString();
-    str += QString("<td width=\"%1%\">%2</td>").
+    str += QString("<th width=\"%1%\">%2</th>").
       arg((widths[i] * 100) / total_width).
       arg(heading);
   }
@@ -243,10 +239,36 @@ void QAnyulogus::printPressed()
     "</body>\n"
     "</html>\n";
 
+  return str;
+}
+
+bool QAnyulogus::exportFile(QString filename)
+{
+  QFile file(filename);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    return false;
+
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+
+  out << generateHTML();
+
+  file.close();
+  return true;
+}
+
+void QAnyulogus::printPressed()
+{
+  if(QMessageBox::question(this, "Nyomtatás",
+			   "Az alsó táblázat tartalmát fogom kinyomtatni.\n"
+			   "Mehet?", QMessageBox::No, QMessageBox::Yes)
+     == QMessageBox::No)
+    return;
+
   // Printing
   QTextDocument *d = new QTextDocument;
   QPrinter *printer = new QPrinter;
-  d->setHtml(str);
+  d->setHtml(generateHTML());
   d->print(printer);
 }
 

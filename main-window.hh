@@ -22,6 +22,7 @@ public slots:
   void changeMade();
   void openPressed();
   bool savePressed();
+  void exportPressed();
   void helpPressed() const;
 
 private:
@@ -33,6 +34,7 @@ private:
   QToolBar *toolbar;
   QAction *openAction;
   QAction *saveAction;
+  QAction *exportAction;
   QAction *newAction;
   QAction *deleteAction;
   QAction *printAction;

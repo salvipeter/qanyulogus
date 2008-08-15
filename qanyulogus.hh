@@ -23,6 +23,7 @@ public:
   QAnyulogus(QWidget *parent);
   bool openFile(QString filename);
   bool saveFile(QString filename);
+  bool exportFile(QString filename);
 
 public slots:
   void newPressed();
@@ -33,7 +34,9 @@ public slots:
 
 private:
   QString createRow(QStringList list);
+  QString generateHTML();
 
+  QString data_title;
   QStandardItemModel *model;
   HungarianSortFilterProxyModel *tableProxy;
   QTableView *table;
