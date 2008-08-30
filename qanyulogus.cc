@@ -153,6 +153,7 @@ bool QAnyulogus::saveFile(QString filename)
   int const n = model->columnCount();
   int const m = model->rowCount();
 
+  out << data_title << "\n";
   QStringList list;
   for(int i = 0; i < n; ++i)
     list.push_back(model->horizontalHeaderItem(i)->text());
