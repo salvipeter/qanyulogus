@@ -3,6 +3,7 @@
 #include <QComboBox>
 #include <QFile>
 #include <QHBoxLayout>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
@@ -126,14 +127,37 @@ bool QAnyulogus::openFile(QString filename)
     for(int i = 0; i < n; ++i)
       model->setItem(j, i, new QStandardItem(row[i]));
   }
-  tableProxy->setDynamicSortFilter(true);
-  searchProxy->setDynamicSortFilter(true);
-  table->sortByColumn(0, Qt::AscendingOrder);
-  search->sortByColumn(0, Qt::AscendingOrder);
+
+  // Retain the original (inserted) order afted load.
+  table->sortByColumn(-1, Qt::AscendingOrder);
+  search->sortByColumn(-1, Qt::AscendingOrder);
+
+  // TODO: the proxies remember the sort columns (why?!)
+  // So here's a hack that creates new instances and updates
+  // the tableviews and their connections.
+  tableProxy = new HungarianSortFilterProxyModel;
+  tableProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+  table->setModel(tableProxy);
+  disconnect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
+	     SLOT(setFilterFixedString(const QString &)));
+  searchProxy = new HungarianSortFilterProxyModel;
+  searchProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  searchProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+  search->setModel(searchProxy);
+  connect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
+	  SLOT(setFilterFixedString(const QString &)));
 
   // Reload to reflect the changes
   tableProxy->setSourceModel(model);
-  searchProxy->setSourceModel(model);  
+  tableProxy->setDynamicSortFilter(true);
+  searchProxy->setSourceModel(model);
+  searchProxy->setDynamicSortFilter(true);
+
+  // Resize the columns
+  table->resizeColumnsToContents();
+  table->horizontalHeader()->setStretchLastSection(true);
+  search->resizeColumnsToContents();
+  search->horizontalHeader()->setStretchLastSection(true);
 
   searchCombo->clear();
   searchCombo->addItems(headings);
