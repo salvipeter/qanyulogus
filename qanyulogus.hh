@@ -34,7 +34,8 @@ public slots:
 
 private:
   QString createRow(QStringList list);
-  QString generateHTML();
+  QString htmlize(QString const &str) const;
+  QString generateHTML() const;
 
   QString data_title;
   QStandardItemModel *model;

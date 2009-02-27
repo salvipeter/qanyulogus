@@ -215,16 +215,22 @@ void QAnyulogus::deletePressed()
     model->removeRow(row);
 }
 
-QString QAnyulogus::generateHTML()
+QString QAnyulogus::htmlize(QString const &str) const
+{
+  QString copy(str);
+  return copy.replace('<', "&lt;").replace('>', "&gt;");
+}
+
+QString QAnyulogus::generateHTML() const
 {
   QString str =
     "<html>\n"
     "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
     "<head>\n"
-    "<title>" + data_title + "</title>\n"
+    "<title>" + htmlize(data_title) + "</title>\n"
     "</head>\n"
     "<body>\n"
-    "<h1>" + data_title + "</h1>\n"
+    "<h1>" + htmlize(data_title) + "</h1>\n"
     "<table border=\"1\" align=\"center\">\n";
 
   int const n = searchProxy->columnCount();
@@ -244,7 +250,7 @@ QString QAnyulogus::generateHTML()
 					      Qt::DisplayRole).toString();
     str += QString("<th width=\"%1%\">%2</th>").
       arg((widths[i] * 100) / total_width).
-      arg(heading);
+      arg(htmlize(heading));
   }
   str += "</tr>\n";
 
@@ -254,8 +260,8 @@ QString QAnyulogus::generateHTML()
     str += "<tr>";
     for(int i = 0; i < n; ++i)
       str += QString("<td>%1</td>").
-	arg(searchProxy->itemData(searchProxy->index(j, i))
-	    [Qt::DisplayRole].toString());
+	arg(htmlize(searchProxy->itemData(searchProxy->index(j, i))
+		    [Qt::DisplayRole].toString()));
     str += "</tr>\n";
   }
 
