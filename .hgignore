@@ -1,0 +1,9 @@
+syntax: glob
+
+*~
+.\#*
+*.o
+moc_*
+qrc_*
+Makefile
+qanyulogus
