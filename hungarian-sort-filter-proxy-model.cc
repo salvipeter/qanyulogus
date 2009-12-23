@@ -1,9 +1,15 @@
 #include "hungarian-sort-filter-proxy-model.hh"
 
+QString const HungarianSortFilterProxyModel::abc =
+  QString::fromUtf8("aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz");
+
+// Don't forget to update the documentation,
+// if you change this constant
+int const HungarianSortFilterProxyModel::min_legal_length = 3;
+
 HungarianSortFilterProxyModel::HungarianSortFilterProxyModel() :
   QSortFilterProxyModel()
 {
-  abc = QString::fromUtf8("aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz");
 }
 
 HungarianSortFilterProxyModel::CharLessType
@@ -54,4 +60,13 @@ lessThan (const QModelIndex &left, const QModelIndex &right) const
       return less == CHAR_LESS;
     ++index;
   }
+}
+
+void HungarianSortFilterProxyModel::
+setFilterStringUnlessShort(const QString &str)
+{
+  if(str.length() >= min_legal_length)
+    setFilterFixedString(str);
+  else
+    setFilterFixedString("");
 }

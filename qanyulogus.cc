@@ -77,7 +77,7 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
 	  this->parent(), SLOT(changeMade()));
   connect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
-	  SLOT(setFilterFixedString(const QString &)));
+	  SLOT(setFilterStringUnlessShort(const QString &)));
   connect(searchCombo, SIGNAL(activated(int)), this,
 	  SLOT(setFilterColumn(int)));
   connect(search, SIGNAL(doubleClicked(const QModelIndex &)),
@@ -145,7 +145,7 @@ bool QAnyulogus::openFile(QString filename)
   searchProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
   search->setModel(searchProxy);
   connect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
-	  SLOT(setFilterFixedString(const QString &)));
+	  SLOT(setFilterStringUnlessShort(const QString &)));
 
   // Reload to reflect the changes
   tableProxy->setSourceModel(model);

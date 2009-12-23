@@ -13,11 +13,15 @@ class HungarianSortFilterProxyModel : public QSortFilterProxyModel
 public:
   HungarianSortFilterProxyModel();
 
+public slots:
+  void setFilterStringUnlessShort(const QString &str);
+
 private:
   CharLessType charLess(QChar a, QChar b) const;
   bool lessThan (const QModelIndex &left, const QModelIndex &right) const;
 
-  QString abc;
+  static const QString abc;
+  static const int min_legal_length;
 };
 
 #endif	// HUNGARIAN_SORT_FILTER_PROXY_MODEL_HH
