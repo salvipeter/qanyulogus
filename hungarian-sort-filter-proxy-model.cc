@@ -65,8 +65,9 @@ lessThan (const QModelIndex &left, const QModelIndex &right) const
 void HungarianSortFilterProxyModel::
 setFilterStringUnlessShort(const QString &str)
 {
-  if(str.length() >= min_legal_length)
-    setFilterFixedString(str.trimmed());
+  QString const trimmed = str.trimmed();
+  if(trimmed.length() >= min_legal_length)
+    setFilterFixedString(trimmed);
   else
     setFilterFixedString("");
 }
