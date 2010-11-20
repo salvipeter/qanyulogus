@@ -66,7 +66,7 @@ void HungarianSortFilterProxyModel::
 setFilterStringUnlessShort(const QString &str)
 {
   if(str.length() >= min_legal_length)
-    setFilterFixedString(str);
+    setFilterFixedString(str.trimmed());
   else
     setFilterFixedString("");
 }
