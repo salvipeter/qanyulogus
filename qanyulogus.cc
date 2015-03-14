@@ -52,7 +52,7 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   search->setSelectionBehavior(QAbstractItemView::SelectRows);
   search->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
-  searchLabel = new QLabel(tr("KeresÈs:"));
+  searchLabel = new QLabel(tr("Keres√©s:"));
   searchEdit = new QLineEdit;
   searchCombo = new QComboBox;
 
@@ -206,10 +206,10 @@ void QAnyulogus::newPressed()
 void QAnyulogus::deletePressed()
 {
   int row = model->itemFromIndex(tableProxy->mapToSource(table->currentIndex()))->row();
-  QString message = QString("TÈnyleg ki akarod tˆrˆlni a(z) %1. sort?").
+  QString message = QString("T√©nyleg ki akarod t√∂r√∂lni a(z) %1. sort?").
     arg(row + 1);
   int ret = QMessageBox::question(dynamic_cast<QWidget *>(parent()),
-				  "TˆrlÈs", message,
+				  "T√∂rl√©s", message,
 				  QMessageBox::Yes, QMessageBox::No);
   if(ret == QMessageBox::Yes)
     model->removeRow(row);
@@ -290,8 +290,8 @@ bool QAnyulogus::exportFile(QString filename)
 
 void QAnyulogus::printPressed()
 {
-  if(QMessageBox::question(this, "Nyomtat·s",
-			   "Az alsÛ t·bl·zat tartalm·t fogom kinyomtatni.\n"
+  if(QMessageBox::question(this, "Nyomtat√°s",
+			   "Az als√≥ t√°bl√°zat tartalm√°t fogom kinyomtatni.\n"
 			   "Mehet?", QMessageBox::No, QMessageBox::Yes)
      == QMessageBox::No)
     return;

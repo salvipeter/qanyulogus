@@ -21,48 +21,48 @@ MainWindow::MainWindow() :
   setCentralWidget(anyulogus);
 
   // Actions
-  openAction = new QAction(QIcon(":/images/fileopen.png"), tr("Megnyit·s"), this);
+  openAction = new QAction(QIcon(":/images/fileopen.png"), tr("Megnyit√°s"), this);
   openAction->setShortcut(tr("Ctrl+O"));
-  openAction->setStatusTip(tr("Megnyit egy QAnyulÛgus f·jlt. (C-o)"));
+  openAction->setStatusTip(tr("Megnyit egy QAnyul√≥gus f√°jlt. (C-o)"));
   connect(openAction, SIGNAL(triggered()), this, SLOT(openPressed()));
 
-  saveAction = new QAction(QIcon(":/images/filesave.png"), tr("MentÈs"), this);
+  saveAction = new QAction(QIcon(":/images/filesave.png"), tr("Ment√©s"), this);
   saveAction->setShortcut(tr("Ctrl+S"));
-  saveAction->setStatusTip(tr("Elmenti a QAnyulÛgus f·jlt. (C-s)"));
+  saveAction->setStatusTip(tr("Elmenti a QAnyul√≥gus f√°jlt. (C-s)"));
   saveAction->setEnabled(false);
   connect(saveAction, SIGNAL(triggered()), this, SLOT(savePressed()));
 
   exportAction = new QAction(QIcon(":/images/fileexport.png"), tr("Export"), this);
   exportAction->setShortcut(tr("Ctrl+E"));
-  exportAction->setStatusTip(tr("Export·l HTML f·jlba. (C-e)"));
+  exportAction->setStatusTip(tr("Export√°l HTML f√°jlba. (C-e)"));
   exportAction->setEnabled(false);
   connect(exportAction, SIGNAL(triggered()), this, SLOT(exportPressed()));
 
-  newAction = new QAction(QIcon(":/images/linenew.png"), tr("⁄j sor"), this);
+  newAction = new QAction(QIcon(":/images/linenew.png"), tr("√öj sor"), this);
   newAction->setShortcut(tr("Ctrl+N"));
-  newAction->setStatusTip(tr("⁄j bejegyzÈst nyit a katalÛgusban. (C-n)"));
+  newAction->setStatusTip(tr("√öj bejegyz√©st nyit a katal√≥gusban. (C-n)"));
   newAction->setEnabled(false);
   connect(newAction, SIGNAL(triggered()), anyulogus, SLOT(newPressed()));
 
-  deleteAction = new QAction(QIcon(":/images/linedelete.png"), tr("Sor tˆrlÈse"), this);
+  deleteAction = new QAction(QIcon(":/images/linedelete.png"), tr("Sor t√∂rl√©se"), this);
   deleteAction->setShortcut(tr("Ctrl+D"));
-  deleteAction->setStatusTip(tr("Kitˆrˆl egy bejegyzÈst a katalÛgusbÛl. (C-d)"));
+  deleteAction->setStatusTip(tr("Kit√∂r√∂l egy bejegyz√©st a katal√≥gusb√≥l. (C-d)"));
   deleteAction->setEnabled(false);
   connect(deleteAction, SIGNAL(triggered()), anyulogus, SLOT(deletePressed()));
 
-  printAction = new QAction(QIcon(":/images/fileprint.png"), tr("Nyomtat·s"), this);
+  printAction = new QAction(QIcon(":/images/fileprint.png"), tr("Nyomtat√°s"), this);
   printAction->setShortcut(tr("Ctrl+P"));
-  printAction->setStatusTip(tr("Kinyomtatja a katalÛgust. (C-p)"));
+  printAction->setStatusTip(tr("Kinyomtatja a katal√≥gust. (C-p)"));
   printAction->setEnabled(false);
   connect(printAction, SIGNAL(triggered()), anyulogus, SLOT(printPressed()));
 
-  helpAction = new QAction(QIcon(":/images/help.png"), tr("SegÌtsÈg"), this);
+  helpAction = new QAction(QIcon(":/images/help.png"), tr("Seg√≠ts√©g"), this);
   helpAction->setShortcut(tr("Ctrl+H"));
-  helpAction->setStatusTip(tr("Haszn·lati utasÌt·s Ès egyÈb inform·ciÛk. (C-h)"));
+  helpAction->setStatusTip(tr("Haszn√°lati utas√≠t√°s √©s egy√©b inform√°ci√≥k. (C-h)"));
   connect(helpAction, SIGNAL(triggered()), this, SLOT(helpPressed()));
 
   // Toolbar
-  toolbar = addToolBar(tr("Eszkˆzt·r"));
+  toolbar = addToolBar(tr("Eszk√∂zt√°r"));
   toolbar->addAction(openAction);
   toolbar->addAction(saveAction);
   toolbar->addAction(exportAction);
@@ -92,8 +92,8 @@ void MainWindow::openPressed()
     return;
 
   QString filename =
-    QFileDialog::getOpenFileName(this, tr("Megnyit·s"), ".",
-				 tr("QAnyulÛgus f·jlok (*.anyu)"));
+    QFileDialog::getOpenFileName(this, tr("Megnyit√°s"), ".",
+				 tr("QAnyul√≥gus f√°jlok (*.anyu)"));
   if(filename != "")
     openFile(filename);
 }
@@ -104,9 +104,9 @@ bool MainWindow::savePressed()
     return true;
 
   if(!anyulogus->saveFile(file_name)) {
-    QMessageBox::critical(this, "MentÈs sikertelen",
+    QMessageBox::critical(this, "Ment√©s sikertelen",
 			  "A(z) \"" + file_name +
-			  "\" f·jlt nem tudtam elmenteni.");
+			  "\" f√°jlt nem tudtam elmenteni.");
     return false;
   }
 
@@ -119,15 +119,15 @@ bool MainWindow::savePressed()
 void MainWindow::exportPressed()
 {
   QString filename =
-    QFileDialog::getSaveFileName(this, tr("Export·l·s"), ".",
-				 tr("HTML f·jlok (*.html)"));
+    QFileDialog::getSaveFileName(this, tr("Export√°l√°s"), ".",
+				 tr("HTML f√°jlok (*.html)"));
   if(filename != "") {
     if(!filename.endsWith("html", Qt::CaseInsensitive))
       filename += ".html";
     if(!anyulogus->exportFile(filename)) {
-      QMessageBox::critical(this, "Export·l·s sikertelen",
+      QMessageBox::critical(this, "Export√°l√°s sikertelen",
 			    "A(z) \"" + file_name +
-			    "\" f·jlt nem tudtam Ìrni.");
+			    "\" f√°jlt nem tudtam √≠rni.");
     }
   }
 }
@@ -136,14 +136,14 @@ void MainWindow::helpPressed() const
 {
   QTextBrowser *browser = new QTextBrowser;
   browser->setSource(QUrl("qrc:/doc/help.html"));
-  browser->setWindowTitle(tr("Haszn·lati ˙tmutatÛ"));
+  browser->setWindowTitle(tr("Haszn√°lati √∫tmutat√≥"));
   browser->resize(640, 480);
   browser->show();
 }
 
 void MainWindow::setTitle()
 {
-  QString new_title = QString("QAnyulÛgus");
+  QString new_title = QString("QAnyul√≥gus");
   if(file_name != "")
     new_title += " - " + file_name.section('/', -1) + (!saved ? "*" : "");
   setWindowTitle(new_title);
@@ -153,9 +153,9 @@ void MainWindow::setTitle()
 void MainWindow::openFile(QString filename)
 {
   if(!anyulogus->openFile(filename)) {
-    QMessageBox::critical(this, "A f·jl nem nyithatÛ",
-			  "A f·jl \"" + filename + "\" nem nyithatÛ meg,\n"
-			  "vagy a f·jlban nem minden bejegyzÈs hossza azonos.");
+    QMessageBox::critical(this, "A f√°jl nem nyithat√≥",
+			  "A f√°jl \"" + filename + "\" nem nyithat√≥ meg,\n"
+			  "vagy a f√°jlban nem minden bejegyz√©s hossza azonos.");
     return;
   }
 
@@ -175,8 +175,8 @@ bool MainWindow::maybeSave()
 {
   if(saved)
     return true;
-  int ret = QMessageBox::warning(this, tr("A katalÛgus megv·ltozott."),
-				 tr("Nem mentetted el a katalÛgust."),
+  int ret = QMessageBox::warning(this, tr("A katal√≥gus megv√°ltozott."),
+				 tr("Nem mentetted el a katal√≥gust."),
 				 QMessageBox::Save | QMessageBox::Discard |
 				 QMessageBox::Cancel, QMessageBox::Save);
   switch(ret) {

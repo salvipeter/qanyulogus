@@ -2,10 +2,9 @@
 #
 # QAnyulogus, by Peter Salvi (2008)
 
-TEMPLATE = app
-TARGET = 
-DEPENDPATH += .
-INCLUDEPATH += .
+TARGET = qanyulogus
+CONFIG += qt
+QT += gui widgets xml printsupport
 
 # Input
 HEADERS += opener-application.hh main-window.hh qanyulogus.hh \
