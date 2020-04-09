@@ -139,6 +139,7 @@ void MainWindow::helpPressed() const
   browser->setWindowTitle(tr("Használati útmutató"));
   browser->resize(640, 480);
   browser->show();
+  browser->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void MainWindow::setTitle()
@@ -181,7 +182,10 @@ bool MainWindow::maybeSave()
 				 QMessageBox::Cancel, QMessageBox::Save);
   switch(ret) {
   case QMessageBox::Cancel: return false;
-  case QMessageBox::Save: if(!savePressed()) return false;
+  case QMessageBox::Save:
+    if(!savePressed())
+      return false;
+    return true;
   default: return true;
   }
 }

@@ -7,8 +7,8 @@ QString const HungarianSortFilterProxyModel::abc =
 // if you change this constant
 int const HungarianSortFilterProxyModel::min_legal_length = 3;
 
-HungarianSortFilterProxyModel::HungarianSortFilterProxyModel() :
-  QSortFilterProxyModel()
+HungarianSortFilterProxyModel::HungarianSortFilterProxyModel(QObject *parent) :
+  QSortFilterProxyModel(parent)
 {
 }
 

@@ -21,14 +21,14 @@
 
 QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
 {
-  model = new QStandardItemModel;
+  model = new QStandardItemModel(this);
 
-  tableProxy = new HungarianSortFilterProxyModel;
+  tableProxy = new HungarianSortFilterProxyModel(this);
   tableProxy->setSourceModel(model);
   tableProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
   tableProxy->setDynamicSortFilter(true);
 
-  table = new QTableView;
+  table = new QTableView(this);
   table->setAlternatingRowColors(true);
   table->setSortingEnabled(true);
   table->setModel(tableProxy);
@@ -37,13 +37,13 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   table->setSelectionBehavior(QAbstractItemView::SelectRows);
   table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
-  searchProxy = new HungarianSortFilterProxyModel;
+  searchProxy = new HungarianSortFilterProxyModel(this);
   searchProxy->setSourceModel(model);
   searchProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
   searchProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
   searchProxy->setDynamicSortFilter(true);
 
-  search = new QTableView;
+  search = new QTableView(this);
   search->setAlternatingRowColors(true);
   search->setSortingEnabled(true);
   search->setModel(searchProxy);
@@ -135,12 +135,14 @@ bool QAnyulogus::openFile(QString filename)
   // TODO: the proxies remember the sort columns (why?!)
   // So here's a hack that creates new instances and updates
   // the tableviews and their connections.
-  tableProxy = new HungarianSortFilterProxyModel;
+  delete tableProxy;
+  tableProxy = new HungarianSortFilterProxyModel(this);
   tableProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
   table->setModel(tableProxy);
   disconnect(searchEdit, SIGNAL(textEdited(const QString &)), searchProxy,
 	     SLOT(setFilterFixedString(const QString &)));
-  searchProxy = new HungarianSortFilterProxyModel;
+  delete searchProxy;
+  searchProxy = new HungarianSortFilterProxyModel(this);
   searchProxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
   searchProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
   search->setModel(searchProxy);

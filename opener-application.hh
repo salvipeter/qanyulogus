@@ -10,7 +10,7 @@ class OpenerApplication : public QApplication
   Q_OBJECT
 
 public:
-  OpenerApplication(int argc, char *argv[]);
+  OpenerApplication(int &argc, char **argv);
   void setMainWindow(MainWindow *mw) { mainWindow = mw; }
 
 protected:

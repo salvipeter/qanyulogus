@@ -3,7 +3,7 @@
 # QAnyulogus, by Peter Salvi (2008)
 
 TARGET = qanyulogus
-CONFIG += qt
+CONFIG += qt debug
 QT += gui widgets xml printsupport
 
 # Input

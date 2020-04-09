@@ -3,7 +3,7 @@
 #include "main-window.hh"
 #include "opener-application.hh"
 
-OpenerApplication::OpenerApplication(int argc, char *argv[]) :
+OpenerApplication::OpenerApplication(int &argc, char **argv) :
   QApplication(argc, argv)
 {
 }

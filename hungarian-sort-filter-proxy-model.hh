@@ -11,7 +11,7 @@ class HungarianSortFilterProxyModel : public QSortFilterProxyModel
   enum CharLessType { CHAR_EQUAL, CHAR_LESS, CHAR_GREATER };
 
 public:
-  HungarianSortFilterProxyModel();
+  HungarianSortFilterProxyModel(QObject *parent = nullptr);
 
 public slots:
   void setFilterStringUnlessShort(const QString &str);

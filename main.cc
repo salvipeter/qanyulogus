@@ -7,7 +7,7 @@
 #include "main-window.hh"
 #include "opener-application.hh"
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
   OpenerApplication app(argc, argv);
 
