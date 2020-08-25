@@ -19,7 +19,7 @@
 #include "hungarian-sort-filter-proxy-model.hh"
 #include "qanyulogus.hh"
 
-QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
+QAnyulogus::QAnyulogus(QWidget *parent) : QSplitter(parent)
 {
   model = new QStandardItemModel(this);
 
@@ -36,6 +36,7 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   table->setSelectionMode(QAbstractItemView::SingleSelection);
   table->setSelectionBehavior(QAbstractItemView::SelectRows);
   table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+  table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
   searchProxy = new HungarianSortFilterProxyModel(this);
   searchProxy->setSourceModel(model);
@@ -51,6 +52,7 @@ QAnyulogus::QAnyulogus(QWidget *parent = 0) : QSplitter(parent)
   search->setSelectionMode(QAbstractItemView::SingleSelection);
   search->setSelectionBehavior(QAbstractItemView::SelectRows);
   search->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+  search->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
   searchLabel = new QLabel(tr("Keresés:"));
   searchEdit = new QLineEdit;
@@ -154,12 +156,6 @@ bool QAnyulogus::openFile(QString filename)
   tableProxy->setDynamicSortFilter(true);
   searchProxy->setSourceModel(model);
   searchProxy->setDynamicSortFilter(true);
-
-  // Resize the columns
-  table->resizeColumnsToContents();
-  table->horizontalHeader()->setStretchLastSection(true);
-  search->resizeColumnsToContents();
-  search->horizontalHeader()->setStretchLastSection(true);
 
   searchCombo->clear();
   searchCombo->addItems(headings);
